@@ -16,7 +16,11 @@ func Init() *gorm.DB {
 		log.Fatalln(err)
 	}
 
-	db.Table("users", &dbusers.UserModel{})
+	err = db.Migrator().CreateTable(dbusers.Users{})
+
+	if err != nil {
+
+	}
 
 	return db
 }

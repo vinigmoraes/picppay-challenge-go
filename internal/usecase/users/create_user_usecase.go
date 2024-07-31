@@ -11,7 +11,7 @@ type CreateUserUseCase struct {
 }
 
 func (useCase *CreateUserUseCase) Execute(dto dtos.UserDTO) {
-	model := database.UserModel{
+	model := database.Users{
 		Name:      dto.Name,
 		Email:     dto.Email,
 		Password:  dto.Password,
@@ -20,7 +20,7 @@ func (useCase *CreateUserUseCase) Execute(dto dtos.UserDTO) {
 		CreatedAt: time.Now(),
 	}
 
-	err := useCase.Repository.Save(model)
+	err := useCase.Repository.Save(&model)
 
 	if err != nil {
 		return

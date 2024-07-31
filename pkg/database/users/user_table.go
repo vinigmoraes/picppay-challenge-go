@@ -2,7 +2,7 @@ package dbusers
 
 import "time"
 
-type UserModel struct {
+type Users struct {
 	ID        uint `gorm:"primary_key"`
 	Name      string
 	Email     string `gorm:"unique"`

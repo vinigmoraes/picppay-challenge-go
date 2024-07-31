@@ -10,6 +10,6 @@ import (
 func InjectCreateUserHandler(db *gorm.DB) handlers.CreateUserHandler {
 	return handlers.CreateUserHandler{
 		UseCase: usecase.CreateUserUseCase{
-			Repository: database.UserRepositoryAdapter{DB: db},
+			Repository: &database.UserRepositoryAdapter{DB: db},
 		}}
 }
