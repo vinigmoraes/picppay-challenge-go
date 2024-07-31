@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  database:
+    container_name: postgres
+    image: postgres:12.8
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=picpaychallenge
+    ports:
+      - 5432:5432
