@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"picpay-challenge-go/cmd/api/dtos"
+	errorhandler "picpay-challenge-go/cmd/api/error"
 	database "picpay-challenge-go/pkg/database/users"
 	"time"
 )
@@ -10,7 +11,7 @@ type CreateUserUseCase struct {
 	Repository UserRepository
 }
 
-func (useCase *CreateUserUseCase) Execute(dto dtos.UserDTO) {
+func (useCase *CreateUserUseCase) Execute(dto dtos.UserDTO) (database.Users, errorhandler.APIError) {
 	model := database.Users{
 		Name:      dto.Name,
 		Email:     dto.Email,
@@ -22,7 +23,5 @@ func (useCase *CreateUserUseCase) Execute(dto dtos.UserDTO) {
 
 	err := useCase.Repository.Save(&model)
 
-	if err != nil {
-		return
-	}
+	return model, err
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"picpay-challenge-go/cmd/api/dtos"
+	errorhandler "picpay-challenge-go/cmd/api/error"
 	"picpay-challenge-go/internal/usecase/users"
 )
 
@@ -19,14 +20,20 @@ func (handler *CreateUserHandler) CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	errors := dtos.Validate(userDTO)
+	validationErrors := dtos.Validate(userDTO)
 
-	if len(errors) > 0 {
-		ctx.JSON(http.StatusBadRequest, errors)
+	if len(validationErrors) > 0 {
+		ctx.JSON(http.StatusBadRequest, validationErrors)
 		return
 	}
 
-	handler.UseCase.Execute(userDTO)
+	user, err := handler.UseCase.Execute(userDTO)
 
-	ctx.JSON(http.StatusCreated, gin.H{"message": "User created"})
+	if err != nil {
+		message, statusCode := errorhandler.HandleError(err)
+		ctx.JSON(statusCode, gin.H{"message": message})
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, gin.H{"user_id": user.ID})
 }
