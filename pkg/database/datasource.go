@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 	"log"
 	dbusers "picpay-challenge-go/pkg/database/users"
+	dbwallets "picpay-challenge-go/pkg/database/wallet"
 )
 
 func Init() *gorm.DB {
@@ -16,10 +17,10 @@ func Init() *gorm.DB {
 		log.Fatalln(err)
 	}
 
-	err = db.Migrator().CreateTable(dbusers.Users{})
+	err = db.AutoMigrate(dbusers.Users{}, dbwallets.Wallets{})
 
 	if err != nil {
-
+		log.Fatalln(err)
 	}
 
 	return db

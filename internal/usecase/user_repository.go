@@ -2,9 +2,9 @@ package usecase
 
 import (
 	errorhandler "picpay-challenge-go/cmd/api/error"
-	dbusers "picpay-challenge-go/pkg/database/users"
+	"picpay-challenge-go/internal/domain"
 )
 
 type UserRepository interface {
-	Save(model *dbusers.Users) errorhandler.APIError
+	Save(model *domain.User) errorhandler.APIError
 }

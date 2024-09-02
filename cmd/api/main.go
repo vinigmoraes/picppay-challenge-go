@@ -11,6 +11,7 @@ import (
 
 func initRoutes(router *gin.Engine, database *gorm.DB) {
 	routes.CreateUserRoute(dependency_injection.InjectCreateUserHandler(database), router)
+	routes.TransferMoney(dependency_injection.InjectTransferMoneyHandler(database), router)
 }
 
 func setupRouter() *gin.Engine {

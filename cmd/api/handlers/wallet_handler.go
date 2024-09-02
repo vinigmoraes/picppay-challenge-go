@@ -5,29 +5,30 @@ import (
 	"net/http"
 	"picpay-challenge-go/cmd/api/dtos"
 	errorhandler "picpay-challenge-go/cmd/api/error"
+	"picpay-challenge-go/cmd/api/responses"
 	"picpay-challenge-go/internal/usecase"
 )
 
-type CreateUserHandler struct {
-	UseCase usecase.CreateUserUseCase
+type TransferMoneyHandler struct {
+	UseCase usecase.TransferMoneyUseCase
 }
 
-func (handler *CreateUserHandler) CreateUser(ctx *gin.Context) {
-	var userDTO dtos.UserDTO
+func (handler *TransferMoneyHandler) TransferMoney(ctx *gin.Context) {
+	var transferDTO dtos.TransferMoneyDTO
 
-	if err := ctx.ShouldBindJSON(&userDTO); err != nil {
+	if err := ctx.ShouldBind(&transferDTO); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	validationErrors := dtos.Validate(userDTO)
+	validationErrors := dtos.Validate(transferDTO)
 
 	if len(validationErrors) > 0 {
 		ctx.JSON(http.StatusBadRequest, validationErrors)
 		return
 	}
 
-	user, err := handler.UseCase.Execute(userDTO)
+	wallet, err := handler.UseCase.Execute(transferDTO)
 
 	if err != nil {
 		message, statusCode := errorhandler.HandleError(err)
@@ -35,5 +36,8 @@ func (handler *CreateUserHandler) CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"user_id": user.ID})
+	ctx.JSON(
+		http.StatusCreated,
+		responses.TransferMoneyResponse{UserID: wallet.UserID, Balance: wallet.Balance},
+	)
 }
