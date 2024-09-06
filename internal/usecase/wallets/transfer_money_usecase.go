@@ -1,4 +1,4 @@
-package usecase
+package walletusecase
 
 import (
 	"picpay-challenge-go/cmd/api/dtos"
@@ -8,11 +8,12 @@ import (
 )
 
 type TransferMoneyUseCase struct {
-	Repository WalletRepository
+	WalletRepository WalletRepository
+	Publisher        EventPublisher
 }
 
 func (wallet *TransferMoneyUseCase) Execute(dto dtos.TransferMoneyDTO) (domain.Wallet, errorhandler.APIError) {
-	payerWallet, err := wallet.Repository.FindByUserId(dto.Payer)
+	payerWallet, err := wallet.WalletRepository.FindByUserId(dto.Payer)
 
 	if err != nil {
 		return domain.Wallet{}, err
@@ -21,6 +22,10 @@ func (wallet *TransferMoneyUseCase) Execute(dto dtos.TransferMoneyDTO) (domain.W
 	if !payerWallet.HasBalance(dto.Value) {
 		return domain.Wallet{}, &errors.InsufficientBalanceError{UserID: dto.Payer, Balance: dto.Value}
 	}
+
+	payerWallet.RemoveBalance(dto.Value)
+
+	wallet.WalletRepository.Update(&payerWallet)
 
 	return payerWallet, nil
 }

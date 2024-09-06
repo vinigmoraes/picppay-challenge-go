@@ -6,7 +6,7 @@ import (
 )
 
 type InsufficientBalanceError struct {
-	UserID  string
+	UserID  int
 	Balance float64
 }
 

@@ -2,6 +2,6 @@ package dtos
 
 type TransferMoneyDTO struct {
 	Value    float64 `json:"value" validate:"required"`
-	Payer    string  `json:"payer" validate:"required"`
-	Receiver string  `json:"receiver" validate:"required"`
+	Payer    int     `json:"payer" validate:"required"`
+	Receiver int     `json:"receiver" validate:"required"`
 }

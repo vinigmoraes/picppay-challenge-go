@@ -11,3 +11,8 @@ services:
       - POSTGRES_DB=picpaychallenge
     ports:
       - 5432:5432
+  rabbitmq:
+    image: rabbitmq:3.8-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"

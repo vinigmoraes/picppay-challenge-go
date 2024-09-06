@@ -6,7 +6,7 @@ import (
 	"picpay-challenge-go/cmd/api/dtos"
 	errorhandler "picpay-challenge-go/cmd/api/error"
 	"picpay-challenge-go/cmd/api/responses"
-	"picpay-challenge-go/internal/usecase"
+	usecase "picpay-challenge-go/internal/usecase/wallets"
 )
 
 type TransferMoneyHandler struct {

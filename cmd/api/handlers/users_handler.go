@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"picpay-challenge-go/cmd/api/dtos"
 	errorhandler "picpay-challenge-go/cmd/api/error"
-	"picpay-challenge-go/internal/usecase"
+	usecase "picpay-challenge-go/internal/usecase/users"
 )
 
 type CreateUserHandler struct {

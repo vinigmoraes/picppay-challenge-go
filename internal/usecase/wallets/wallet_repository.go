@@ -1,4 +1,4 @@
-package usecase
+package walletusecase
 
 import (
 	errorhandler "picpay-challenge-go/cmd/api/error"
@@ -6,6 +6,7 @@ import (
 )
 
 type WalletRepository interface {
-	FindByUserId(userId string) (wallet domain.Wallet, apiError errorhandler.APIError)
+	FindByUserId(userId int) (wallet domain.Wallet, apiError errorhandler.APIError)
 	Save(wallet *domain.Wallet) (apiError errorhandler.APIError)
+	Update(wallet *domain.Wallet) (apiError errorhandler.APIError)
 }

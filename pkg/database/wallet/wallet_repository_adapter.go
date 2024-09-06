@@ -12,8 +12,18 @@ type WalletRepositoryAdapter struct {
 	DB *gorm.DB
 }
 
-func (adapter *WalletRepositoryAdapter) FindByUserId(userId string) (wallet domain.Wallet, apiError errorhandler.APIError) {
-	return domain.Wallet{}, nil
+func (adapter *WalletRepositoryAdapter) FindByUserId(userId int) (wallet domain.Wallet, apiError errorhandler.APIError) {
+	wallets := Wallets{}
+
+	result := adapter.DB.Find(wallets, userId)
+
+	if result.Error != nil {
+		return domain.Wallet{}, handleDatabaseError(wallets, result.Error)
+	}
+
+	result.Model(&wallets)
+
+	return domain.Wallet{ID: wallets.ID, UserID: wallets.UserID, Balance: wallets.Balance}, nil
 }
 
 func (adapter *WalletRepositoryAdapter) Save(wallet *domain.Wallet) errorhandler.APIError {
@@ -31,6 +41,12 @@ func (adapter *WalletRepositoryAdapter) Save(wallet *domain.Wallet) errorhandler
 	wallet.SetId(wallets.ID)
 
 	return nil
+}
+
+func (adapter *WalletRepositoryAdapter) Update(wallet *domain.Wallet) (apiError errorhandler.APIError) {
+	var dbError errorhandler.APIError
+
+	return dbError
 }
 
 func handleDatabaseError(wallets Wallets, err error) errorhandler.APIError {

@@ -1,4 +1,4 @@
-package usecase
+package usersusecase
 
 import (
 	errorhandler "picpay-challenge-go/cmd/api/error"
