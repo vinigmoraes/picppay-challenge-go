@@ -8,3 +8,7 @@ import (
 func TransferMoney(handler handlers.TransferMoneyHandler, router *gin.Engine) {
 	router.POST("/transfer", handler.TransferMoney)
 }
+
+func PutMoneyInWallet(handler handlers.TransferMoneyConsumerHandler) {
+	handler.Consume()
+}

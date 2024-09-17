@@ -9,11 +9,11 @@ import (
 
 type TransferMoneyUseCase struct {
 	WalletRepository WalletRepository
-	Publisher        EventPublisher
+	Publisher        MessageBroker
 }
 
-func (wallet *TransferMoneyUseCase) Execute(dto dtos.TransferMoneyDTO) (domain.Wallet, errorhandler.APIError) {
-	payerWallet, err := wallet.WalletRepository.FindByUserId(dto.Payer)
+func (w TransferMoneyUseCase) Execute(dto dtos.TransferMoneyDTO) (domain.Wallet, errorhandler.APIError) {
+	payerWallet, err := w.WalletRepository.FindByUserId(dto.Payer)
 
 	if err != nil {
 		return domain.Wallet{}, err
@@ -25,7 +25,9 @@ func (wallet *TransferMoneyUseCase) Execute(dto dtos.TransferMoneyDTO) (domain.W
 
 	payerWallet.RemoveBalance(dto.Value)
 
-	wallet.WalletRepository.Update(&payerWallet)
+	w.WalletRepository.Update(&payerWallet)
+
+	w.Publisher.Publish(dto.Value, dto.Payer, dto.Receiver)
 
 	return payerWallet, nil
 }

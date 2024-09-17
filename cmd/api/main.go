@@ -16,6 +16,10 @@ func initRoutes(router *gin.Engine, database *gorm.DB, amqp *amqp091.Channel) {
 	routes.TransferMoney(dependency_injection.InjectTransferMoneyHandler(database, amqp), router)
 }
 
+func initConsumers(database *gorm.DB, amqp *amqp091.Channel) {
+	routes.PutMoneyInWallet(dependency_injection.InjectTransferMoneyConsumer(database, amqp))
+}
+
 func setupRouter() *gin.Engine {
 	r := gin.Default()
 	db := database.Init()
@@ -26,6 +30,7 @@ func setupRouter() *gin.Engine {
 	})
 
 	initRoutes(r, db, broker)
+	initConsumers(db, broker)
 
 	return r
 }

@@ -12,5 +12,17 @@ func Init() (*amqp091.Channel, error) {
 		log.Fatalln(err)
 	}
 
-	return conn.Channel()
+	channel, err := conn.Channel()
+
+	if err != nil {
+		return channel, nil
+	}
+
+	_, err = channel.QueueDeclare("transfer-money", true, false, false, false, nil)
+
+	if err != nil {
+		return channel, err
+	}
+
+	return channel, nil
 }

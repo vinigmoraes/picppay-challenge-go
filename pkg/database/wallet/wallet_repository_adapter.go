@@ -8,6 +8,8 @@ import (
 	dberrors "picpay-challenge-go/pkg/database/errors"
 )
 
+const BALANCE_COLUMN = "balance"
+
 type WalletRepositoryAdapter struct {
 	DB *gorm.DB
 }
@@ -15,13 +17,11 @@ type WalletRepositoryAdapter struct {
 func (adapter *WalletRepositoryAdapter) FindByUserId(userId int) (wallet domain.Wallet, apiError errorhandler.APIError) {
 	wallets := Wallets{}
 
-	result := adapter.DB.Find(wallets, userId)
+	result := adapter.DB.Where(domain.Wallet{UserID: userId}).FirstOrInit(&wallets)
 
 	if result.Error != nil {
 		return domain.Wallet{}, handleDatabaseError(wallets, result.Error)
 	}
-
-	result.Model(&wallets)
 
 	return domain.Wallet{ID: wallets.ID, UserID: wallets.UserID, Balance: wallets.Balance}, nil
 }
@@ -43,10 +43,16 @@ func (adapter *WalletRepositoryAdapter) Save(wallet *domain.Wallet) errorhandler
 	return nil
 }
 
-func (adapter *WalletRepositoryAdapter) Update(wallet *domain.Wallet) (apiError errorhandler.APIError) {
-	var dbError errorhandler.APIError
+func (adapter *WalletRepositoryAdapter) Update(wallet *domain.Wallet) errorhandler.APIError {
+	wallets := Wallets{ID: wallet.ID, UserID: wallet.UserID, Balance: wallet.Balance}
 
-	return dbError
+	result := adapter.DB.Model(&wallets).Where("user_id", wallet.UserID).Update(BALANCE_COLUMN, wallets.Balance)
+
+	if result.Error != nil {
+		return handleDatabaseError(wallets, result.Error)
+	}
+
+	return nil
 }
 
 func handleDatabaseError(wallets Wallets, err error) errorhandler.APIError {

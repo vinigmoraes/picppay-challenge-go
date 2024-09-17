@@ -1,6 +1,7 @@
 package messagequeue
 
 type TransferMoneyEvent struct {
-	value   float64
-	payerId string
+	Value      float64 `json:"value" validate:"required"`
+	PayerId    int     `json:"payer_id" validate:"required"`
+	ReceiverId int     `json:"receiver_id" validate:"required"`
 }

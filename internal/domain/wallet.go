@@ -19,3 +19,7 @@ func (w *Wallet) SetId(id int) {
 func (w *Wallet) RemoveBalance(amount float64) {
 	w.Balance = w.Balance - amount
 }
+
+func (w *Wallet) AddBalance(amount float64) {
+	w.Balance = w.Balance + amount
+}
