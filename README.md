@@ -2,7 +2,7 @@
 
 This project is my solution for the challenge of [Picpay Backend Challenge]() storage at open source repository [Backend Challenges]()
 
-## The development solution
+## The Development Solution
 
 It's possible to registry a user (Common or Seller) when the user is created a wallet is automatically created for him with 100 balance.
 
