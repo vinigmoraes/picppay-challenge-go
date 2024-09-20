@@ -3,14 +3,14 @@ package domain
 type UserType string
 
 const (
-	COMUM  UserType = "COMUM"
+	COMMON UserType = "COMMON"
 	SELLER UserType = "SELLER"
 )
 
 func (u UserType) String() string {
 	switch u {
-	case COMUM:
-		return "COMUM"
+	case COMMON:
+		return "COMMON"
 	case SELLER:
 		return "SELLER"
 	}

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"net/url"
 	"picpay-challenge-go/pkg/httpclient"
 )
 
@@ -13,8 +14,9 @@ type TransferMoneyAuthorizerAdapter struct {
 
 func (t TransferMoneyAuthorizerAdapter) Authorize() (TransactionAuthorizerResponse, error) {
 	authorizerResponse := TransactionAuthorizerResponse{}
+	uri, _ := url.Parse(t.AuthorizerURL)
 
-	body, err := httpclient.Request(http.MethodGet, t.AuthorizerURL)
+	body, err := httpclient.Request(http.MethodGet, uri.String())
 
 	if err != nil {
 		log.Fatal(err)

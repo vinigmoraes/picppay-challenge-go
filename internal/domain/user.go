@@ -32,7 +32,7 @@ func CreateUser(dto dtos.UserDTO) User {
 }
 
 func setIsAbleToTransferMoney(userType string) bool {
-	if userType == COMUM.String() {
+	if userType == COMMON.String() {
 		return true
 	}
 	return false
