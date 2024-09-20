@@ -33,7 +33,7 @@ The content above its in portuguese from Brazil 🇧🇷
 
 # Built With
 
-[GinGonic](https://gin-gonic.com/) - Web Framework
-[GoORM](https://gorm.io/index.html) - Database ORM framework
-[RabbitMQ]() - Message Broker
-[Docker](https://www.docker.com/) - Containerization Platform
+- [GinGonic](https://gin-gonic.com/) - Web Framework
+- [GoORM](https://gorm.io/index.html) - Database ORM framework
+- [RabbitMQ]() - Message Broker
+- [Docker](https://www.docker.com/) - Containerization Platform
