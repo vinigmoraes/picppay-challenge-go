@@ -13,17 +13,17 @@ In this consumer has a integration with a authorizer
 - if the authorize respond successful the money of payer is transfer to the receiver.
 - If not the consumer publish a message to DLQ Queue to give money back to the payer.
 
-# Running Application
+## Running Application
 
 
-# Application Design
+## Application Design
 
 The organization of the project was struct based on [Standard Go Project Design](https://github.com/golang-standards/project-layout), inside the basic structure I choose to use Hexagonal Architecture.
 
-# Architecture
+## Architecture
 
 
-# Utility Links
+## Utility Links
 
 The content above its in portuguese from Brazil 🇧🇷
 
@@ -31,7 +31,7 @@ The content above its in portuguese from Brazil 🇧🇷
 - [How to organize your Golang Project](https://www.youtube.com/watch?v=OFud4iPuAH8) 
 
 
-# Built With
+## Built With
 
 - [GinGonic](https://gin-gonic.com/) - Web Framework
 - [GoORM](https://gorm.io/index.html) - Database ORM framework
