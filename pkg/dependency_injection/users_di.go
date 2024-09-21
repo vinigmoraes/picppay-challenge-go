@@ -35,6 +35,7 @@ func InjectTransferMoneyConsumer(db *gorm.DB, amqp *amqp091.Channel) handlers.Tr
 		UseCase: walletusecase.PutMoneyInWalletUseCase{
 			WalletRepository: &dbwallets.WalletRepositoryAdapter{DB: db},
 			Authorizer:       authorizer.TransferMoneyAuthorizerAdapter{AuthorizerURL: "https://util.devi.tools/api/v2/authorize"},
+			MessageBroker:    &messagequeue.RabbitMQAdapter{Amqp: amqp, QueueName: "transfer-money-dlq"},
 		},
 	}
 }

@@ -4,7 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/rabbitmq/amqp091-go"
 	"gorm.io/gorm"
+	"log/slog"
 	"net/http"
+	"os"
 	"picpay-challenge-go/cmd/api/routes"
 	"picpay-challenge-go/pkg/database"
 	"picpay-challenge-go/pkg/dependency_injection"
@@ -20,6 +22,11 @@ func initConsumers(database *gorm.DB, amqp *amqp091.Channel) {
 	routes.PutMoneyInWallet(dependency_injection.InjectTransferMoneyConsumer(database, amqp))
 }
 
+func setLogger() {
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	slog.SetDefault(logger)
+}
+
 func setupRouter() *gin.Engine {
 	r := gin.Default()
 	db := database.Init()
@@ -31,6 +38,7 @@ func setupRouter() *gin.Engine {
 
 	initRoutes(r, db, broker)
 	initConsumers(db, broker)
+	setLogger()
 
 	return r
 }

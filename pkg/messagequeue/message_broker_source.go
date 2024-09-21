@@ -19,6 +19,7 @@ func Init() (*amqp091.Channel, error) {
 	}
 
 	_, err = channel.QueueDeclare("transfer-money", true, false, false, false, nil)
+	_, _ = channel.QueueDeclare("transfer-money-dlq", true, false, false, false, nil)
 
 	if err != nil {
 		return channel, err

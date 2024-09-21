@@ -2,12 +2,14 @@ package walletusecase
 
 import (
 	"log"
+	"log/slog"
 	"picpay-challenge-go/pkg/messagequeue"
 )
 
 type PutMoneyInWalletUseCase struct {
 	WalletRepository WalletRepository
 	Authorizer       Authorizer
+	MessageBroker    MessageBroker
 }
 
 func (p PutMoneyInWalletUseCase) Execute(event messagequeue.TransferMoneyEvent) {
@@ -23,8 +25,12 @@ func (p PutMoneyInWalletUseCase) Execute(event messagequeue.TransferMoneyEvent) 
 		log.Fatal(authorizeErr)
 	}
 
-	if authorize.IsAuthorized() {
-		receiverWallet.AddBalance(event.Value)
-		p.WalletRepository.Update(&receiverWallet)
+	if !authorize.IsAuthorized() {
+		slog.Warn("Transaction not authorized for payer", slog.Int("payer_id", event.PayerId))
+		p.MessageBroker.Publish(event.Value, event.PayerId, event.ReceiverId)
+		return
 	}
+
+	receiverWallet.AddBalance(event.Value)
+	p.WalletRepository.Update(&receiverWallet)
 }

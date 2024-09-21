@@ -10,5 +10,5 @@ type Data struct {
 }
 
 func (t TransactionAuthorizerResponse) IsAuthorized() bool {
-	return t.Status == "true"
+	return t.Status == "success"
 }

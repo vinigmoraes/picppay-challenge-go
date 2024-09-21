@@ -4,7 +4,7 @@ This project is my solution for the challenge of [Picpay Backend Challenge]() st
 
 ## The Development Solution
 
-It's possible to registry a user (Common or Seller) when the user is created a wallet is automatically created for him with 100 balance.
+It's possible to registry a user (Common or Seller), when the user is created a wallet is automatically created for him with balance equal to 100.
 
 When a user transfer money for another user its published a event on MessageBroker asking for a consumer to execute this money transfer, this consumer receive the event to transfer money for the receiver wallet.
 

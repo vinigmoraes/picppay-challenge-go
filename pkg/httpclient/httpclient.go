@@ -6,13 +6,13 @@ import (
 	"net/http"
 )
 
-func Request(method string, url string) (string, error) {
+func Request(method string, url string) ([]byte, error) {
 	req, _ := http.NewRequest(method, url, nil)
 
 	response, err := http.DefaultClient.Do(req)
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	body, readError := io.ReadAll(response.Body)
@@ -21,5 +21,5 @@ func Request(method string, url string) (string, error) {
 		log.Fatal(readError)
 	}
 
-	return string(body), nil
+	return body, nil
 }
