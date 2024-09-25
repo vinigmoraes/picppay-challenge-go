@@ -3,6 +3,7 @@ package dependency_injection
 import (
 	"github.com/rabbitmq/amqp091-go"
 	"gorm.io/gorm"
+	"picpay-challenge-go/cmd/api/consumers"
 	"picpay-challenge-go/cmd/api/handlers"
 	usersusecase "picpay-challenge-go/internal/usecase/users"
 	walletusecase "picpay-challenge-go/internal/usecase/wallets"
@@ -29,13 +30,22 @@ func InjectTransferMoneyHandler(db *gorm.DB, amqp *amqp091.Channel) handlers.Tra
 	}
 }
 
-func InjectTransferMoneyConsumer(db *gorm.DB, amqp *amqp091.Channel) handlers.TransferMoneyConsumerHandler {
-	return handlers.TransferMoneyConsumerHandler{
+func InjectTransferMoneyConsumer(db *gorm.DB, amqp *amqp091.Channel) consumers.TransferMoneyConsumerHandler {
+	return consumers.TransferMoneyConsumerHandler{
 		Broker: &messagequeue.RabbitMQAdapter{Amqp: amqp, QueueName: "transfer-money"},
 		UseCase: walletusecase.PutMoneyInWalletUseCase{
 			WalletRepository: &dbwallets.WalletRepositoryAdapter{DB: db},
 			Authorizer:       authorizer.TransferMoneyAuthorizerAdapter{AuthorizerURL: "https://util.devi.tools/api/v2/authorize"},
 			MessageBroker:    &messagequeue.RabbitMQAdapter{Amqp: amqp, QueueName: "transfer-money-dlq"},
+		},
+	}
+}
+
+func InjectGiveMoneyBackConsumer(db *gorm.DB, amqp *amqp091.Channel) consumers.GiveMoneyBackConsumer {
+	return consumers.GiveMoneyBackConsumer{
+		Broker: &messagequeue.RabbitMQAdapter{Amqp: amqp, QueueName: "transfer-money-dlq"},
+		UseCase: walletusecase.GiveMoneyBackWalletUseCase{
+			WalletRepository: &dbwallets.WalletRepositoryAdapter{DB: db},
 		},
 	}
 }

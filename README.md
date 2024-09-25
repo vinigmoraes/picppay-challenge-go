@@ -22,6 +22,7 @@ The organization of the project was struct based on [Standard Go Project Design]
 
 ## Architecture
 
+![Architecture](architecture.png "Architecture")
 
 ## Utility Links
 

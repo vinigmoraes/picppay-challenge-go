@@ -20,6 +20,7 @@ func initRoutes(router *gin.Engine, database *gorm.DB, amqp *amqp091.Channel) {
 
 func initConsumers(database *gorm.DB, amqp *amqp091.Channel) {
 	routes.PutMoneyInWallet(dependency_injection.InjectTransferMoneyConsumer(database, amqp))
+	routes.GiveMoneyBackToPayer(dependency_injection.InjectGiveMoneyBackConsumer(database, amqp))
 }
 
 func setLogger() {

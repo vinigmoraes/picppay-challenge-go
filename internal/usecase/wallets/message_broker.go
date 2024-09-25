@@ -1,11 +1,11 @@
 package walletusecase
 
 import (
+	"github.com/rabbitmq/amqp091-go"
 	errorhandler "picpay-challenge-go/cmd/api/error"
-	"picpay-challenge-go/pkg/messagequeue"
 )
 
 type MessageBroker interface {
 	Publish(amount float64, payerId int, receiverId int) errorhandler.APIError
-	Consume() messagequeue.TransferMoneyEvent
+	Consume() <-chan amqp091.Delivery
 }
