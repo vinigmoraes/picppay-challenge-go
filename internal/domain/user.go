@@ -6,28 +6,26 @@ import (
 )
 
 type User struct {
-	ID                    int
-	Name                  string
-	Email                 string
-	CPF                   string
-	Password              string
-	Status                string
-	Type                  UserType
-	WalletID              int
-	CreatedAt             time.Time
-	IsAbleToTransferMoney bool
+	ID        int
+	Name      string
+	Email     string
+	CPF       string
+	Password  string
+	Status    string
+	Type      UserType
+	WalletID  int
+	CreatedAt time.Time
 }
 
 func CreateUser(dto dtos.UserDTO) User {
 	return User{
-		Name:                  dto.Name,
-		Email:                 dto.Email,
-		CPF:                   dto.CPF,
-		Password:              dto.Password,
-		Status:                "active",
-		CreatedAt:             time.Now(),
-		Type:                  UserType(dto.Type),
-		IsAbleToTransferMoney: setIsAbleToTransferMoney(dto.Type),
+		Name:      dto.Name,
+		Email:     dto.Email,
+		CPF:       dto.CPF,
+		Password:  dto.Password,
+		Status:    "active",
+		CreatedAt: time.Now(),
+		Type:      UserType(dto.Type),
 	}
 }
 
@@ -48,4 +46,8 @@ func (u *User) SetId(id int) {
 	if u.ID == 0 {
 		u.ID = id
 	}
+}
+
+func (u *User) IsAbleToTransferMoney() bool {
+	return u.Type == COMMON
 }
