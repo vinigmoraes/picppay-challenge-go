@@ -1,8 +1,19 @@
 version: '3.8'
 
 services:
-  database:
-    container_name: database
+  application:
+    container_name: application
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "2112:2112"
+    depends_on:
+      - postgres
+      - rabbitmq
+  postgres:
+    container_name: postgres
     image: postgres:12.8
     restart: always
     environment:
@@ -12,7 +23,32 @@ services:
     ports:
       - 5432:5432
   rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:3.8-management
     ports:
       - "5672:5672"
       - "15672:15672"
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prom_data:/prometheus
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=grafana
+    volumes:
+      - ./monitoring/grafana:/etc/grafana/provisioning/datasources
+volumes:
+  prom_data:

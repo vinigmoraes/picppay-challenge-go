@@ -3,6 +3,7 @@ package walletusecase
 import (
 	"log"
 	"log/slog"
+	"picpay-challenge-go/cmd/api/metrics"
 	"picpay-challenge-go/pkg/messagequeue"
 )
 
@@ -27,10 +28,12 @@ func (p PutMoneyInWalletUseCase) Execute(event messagequeue.TransferMoneyEvent) 
 
 	if !authorize.IsAuthorized() {
 		slog.Warn("Transaction not authorized for payer", slog.Int("payer_id", event.PayerId))
+		metrics.TransactionNotAuthorizedMetric.Inc()
 		p.MessageBroker.Publish(event.Value, event.PayerId, event.ReceiverId)
 		return
 	}
 
 	receiverWallet.AddBalance(event.Value)
 	p.WalletRepository.Update(&receiverWallet)
+	metrics.TransactionAuthorizedMetric.Inc()
 }

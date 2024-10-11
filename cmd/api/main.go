@@ -2,11 +2,13 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rabbitmq/amqp091-go"
 	"gorm.io/gorm"
 	"log/slog"
 	"net/http"
 	"os"
+	"picpay-challenge-go/cmd/api/metrics"
 	"picpay-challenge-go/cmd/api/routes"
 	"picpay-challenge-go/pkg/database"
 	"picpay-challenge-go/pkg/dependency_injection"
@@ -31,6 +33,7 @@ func setLogger() {
 func setupRouter() *gin.Engine {
 	r := gin.Default()
 	db := database.Init()
+
 	broker, _ := messagequeue.Init()
 
 	r.GET("/ping", func(c *gin.Context) {
@@ -44,8 +47,21 @@ func setupRouter() *gin.Engine {
 	return r
 }
 
+func monitor() {
+	go func() {
+		http.Handle("/metrics", promhttp.Handler())
+		_ = http.ListenAndServe(":2112", nil)
+	}()
+}
+
+func initMetrics() {
+	metrics.InitTransactionsMetrics()
+}
+
 func main() {
 	r := setupRouter()
+	monitor()
+	initMetrics()
 
 	r.Run(":8080")
 }

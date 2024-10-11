@@ -6,11 +6,11 @@ import (
 	"picpay-challenge-go/cmd/api/dtos"
 	errorhandler "picpay-challenge-go/cmd/api/error"
 	"picpay-challenge-go/cmd/api/responses"
-	usecase "picpay-challenge-go/internal/usecase/wallets"
+	walletusecase "picpay-challenge-go/internal/usecase/wallets"
 )
 
 type TransferMoneyHandler struct {
-	UseCase usecase.TransferMoneyUseCase
+	UseCase walletusecase.TransferMoneyUseCase
 }
 
 func (handler *TransferMoneyHandler) TransferMoney(ctx *gin.Context) {

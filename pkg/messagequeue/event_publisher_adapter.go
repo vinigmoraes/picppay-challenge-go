@@ -42,6 +42,6 @@ func (a RabbitMQAdapter) Consume() <-chan amqp091.Delivery {
 	if err != nil {
 		log.Printf("Error consuming message from queue: %s", err)
 	}
-	
+
 	return messages
 }

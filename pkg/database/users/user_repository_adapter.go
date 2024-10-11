@@ -19,7 +19,7 @@ func (adapter *UserRepositoryAdapter) Save(user *domain.User) errorhandler.APIEr
 		Email:                 user.Email,
 		Password:              user.Password,
 		CPF:                   user.CPF,
-		IsAbleToTransferMoney: user.IsAbleToTransferMoney,
+		IsAbleToTransferMoney: user.IsAbleToTransferMoney(),
 		Status:                "active",
 		CreatedAt:             time.Now(),
 		Type:                  user.Type.String(),
